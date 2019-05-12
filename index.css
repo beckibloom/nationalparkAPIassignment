@@ -36,3 +36,7 @@ button:hover {
 li {
     list-style-type:none;
 }
+
+.search-term {
+    color:blue;
+}
