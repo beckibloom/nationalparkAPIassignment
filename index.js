@@ -13,7 +13,7 @@ function formatQueryParams(params) {
 function displayResults(responseJson, state) {
   console.log(responseJson);
   $('#results-list').empty();
-  
+
   if (responseJson.total === "0") {
     $('#results-list').append(`<li class="error-message">Uh oh! We don't have any parks for that state. Please check your state code and try again.</li>`);
   }
