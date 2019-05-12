@@ -10,15 +10,20 @@ function formatQueryParams(params) {
   return queryItems.join('&');
 }
 
-function displayResults(responseJson, state) {
+function displayResults(responseJson, state, maxResults) {
   console.log(responseJson);
   $('#results-list').empty();
 
-  if (responseJson.total === "0") {
-    $('#results-list').append(`<li class="error-message">Uh oh! We don't have any parks for that state. Please check your state code and try again.</li>`);
+  const total = Number(responseJson.total);
+
+  if (total === 0) {
+        $('#results-list').append(`<li class="error-message">Uh oh! We don't have any parks for that state. Please check your state code and try again.</li>`);
   }
-  else if (responseJson.total === "496") {
-    $('#results-list').append(`<li class="error-message">No state was specified. Results below are for every state.</li>`);
+  else if (total === 496) {
+        $('#results-list').append(`<li class="error-message">No state was specified. Results below are for every state.</li>`);
+  }
+  else if (total < (maxResults + 1)) {
+        $('#results-list').append(`<li class="error-message">We don't have ${(maxResults + 1)} parks to show you, but we do have ${total}!</li>`);
   }
 
   for (let i = 0; i < responseJson.data.length; i++){
@@ -54,7 +59,7 @@ function getParks(state, maxResults=10) {
       }
       throw new Error(response.statusText);
     })
-    .then(responseJson => displayResults(responseJson, state))
+    .then(responseJson => displayResults(responseJson, state, maxResults))
     .catch(err => {
       $('#js-error-message').text(`Uh oh! Something went wrong. Here's what we know: ${err.message}`);
     });
